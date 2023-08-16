@@ -1,0 +1,82 @@
+Lecture 1
+
+Las APIs son programas que programas externos pueden acceder para operar sobre ellas. La forma de hacerlo es 
+a través de los protocolos HTTP (get, delete, put, update, etc) que permiten operar sobre estas APIs. 
+
+La forma de operar con estas es a través de Visual studio. El autor recomienda modificar la clase program.cs de esta 
+forma 
+
+namespace WebApiAutores
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            var startup = new Startup(builder.Configuration);
+
+            startup.ConfigureServices(builder.Services);
+           
+
+            var app = builder.Build();
+
+            startup.Configure(app, app.Environment);
+            
+
+            app.Run();
+        }
+    }
+}
+
+
+y escribir una nueva clase Startup.cs de esta manera 
+
+namespace WebApiAutores
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) 
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+}
+
+Explica también como funciona el debugger, es lo mismo que ya hemos visto en los cursos anteriores. 
+
+
+
+
+
+
